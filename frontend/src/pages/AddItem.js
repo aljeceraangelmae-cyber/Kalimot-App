@@ -11,7 +11,7 @@ const AddItem = () => {
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
-  const [mode, setMode] = useState(null); // 'camera' or 'file'
+  const [, setMode] = useState(null); // 'camera' or 'file'
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
