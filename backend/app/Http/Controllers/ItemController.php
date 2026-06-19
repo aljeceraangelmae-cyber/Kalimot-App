@@ -20,9 +20,12 @@ class ItemController extends Controller
             $base64Image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
 
             $response = Http::asForm()->post('https://api.imgbb.com/1/upload', [
-                'key'   => 'PASTE_YOUR_REAL_IMGBB_KEY_HERE',
+                'key'   => 'ae277167e24822e95193d06a07abf12f',
                 'image' => $base64Image,
             ]);
+
+            \Log::info('ImgBB response', ['body' => $response->body(), 'status' => $response->status()]);
+
 
             if ($response->successful()) {
                 $imageUrl = $response->json('data.url');
