@@ -2,8 +2,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 
-// Handle preflight OPTIONS requests (needed for CORS)
-Route::options('{any}', [ItemController::class, 'options'])->where('any', '.*');
 
 // Important: search and suggest must come BEFORE the {id} wildcard
 Route::get('/items/search',  [ItemController::class, 'search']);
