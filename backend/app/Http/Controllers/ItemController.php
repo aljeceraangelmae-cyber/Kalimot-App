@@ -1,77 +1,28 @@
-<?php
-namespace App\Http\Controllers;
-use App\Models\Item;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
-class ItemController extends Controller
+public function store(Request $request)
 {
-    private function corsHeaders()
-{
-    $allowedOrigins = [
-        'http://localhost:3000',
-        'https://kalimot-app.vercel.app',
-    ];
+    $imageUrl = null;
 
-    $origin = request()->header('Origin');
-    $allowOrigin = in_array($origin, $allowedOrigins) ? $origin : $allowedOrigins[1];
+    if ($request->hasFile('image')) {
+        $base64Image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
 
-    return [
-        'Access-Control-Allow-Origin'  => $allowOrigin,
-        'Access-Control-Allow-Methods' => 'GET, POST, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers' => 'Content-Type, Accept',
-    ];
-}
-
-    public function index()
-    {
-        return response()->json(Item::latest()->get(), 200, $this->corsHeaders());
-    }
-
-    public function store(Request $request)
-    {
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('items', 'public');
-        }
-
-        $item = Item::create([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'location_note' => $request->location_note,
-            'image_path'    => $imagePath,
+        $response = Http::asForm()->post('https://api.imgbb.com/1/upload', [
+            'key'   => env('IMGBB_API_KEY'),
+            'image' => $base64Image,
         ]);
 
-        return response()->json($item, 201, $this->corsHeaders());
+        if ($response->successful()) {
+            $imageUrl = $response->json('data.url');
+        }
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->get('q');
-        $items = Item::where('name', 'like', "%$query%")
-                     ->latest()
-                     ->get();
-        return response()->json($items, 200, $this->corsHeaders());
-    }
+    $item = Item::create([
+        'name'          => $request->name,
+        'description'   => $request->description,
+        'location_note' => $request->location_note,
+        'image_path'    => $imageUrl,
+    ]);
 
-    public function suggest(Request $request)
-    {
-        $name = $request->get('name');
-        $suggestion = Item::where('name', 'like', "%$name%")
-            ->selectRaw('location_note, COUNT(*) as count')
-            ->groupBy('location_note')
-            ->orderByDesc('count')
-            ->first();
-        return response()->json($suggestion, 200, $this->corsHeaders());
-    }
-
-    public function destroy($id)
-    {
-        Item::findOrFail($id)->delete();
-        return response()->json(['message' => 'Deleted'], 200, $this->corsHeaders());
-    }
-
-    public function options()
-    {
-        return response()->json('OK', 200, $this->corsHeaders());
-    }
+    return response()->json($item, 201);
 }

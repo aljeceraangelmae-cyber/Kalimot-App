@@ -25,7 +25,7 @@ const Home = () => {
             <div className="card">
               {item.image_path && (
                 <img
-                  src={`${process.env.REACT_APP_API_URL}/storage/${item.image_path}`}
+                src={item.image_path}
                   className="card-img-top"
                   alt={item.name}
                   style={{ height: '180px', objectFit: 'cover' }}
