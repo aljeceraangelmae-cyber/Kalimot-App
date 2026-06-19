@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Home = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/items')
+    api.get('/api/items')
       .then(res => setItems(res.data))
       .catch(err => console.error(err));
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8000/api/items/${id}`)
+    api.delete(`/api/items/${id}`)
       .then(() => setItems(items.filter(item => item.id !== id)));
   };
 
@@ -25,7 +25,7 @@ const Home = () => {
             <div className="card">
               {item.image_path && (
                 <img
-                  src={`http://localhost:8000/storage/${item.image_path}`}
+                  src={`${process.env.REACT_APP_API_URL}/storage/${item.image_path}`}
                   className="card-img-top"
                   alt={item.name}
                   style={{ height: '180px', objectFit: 'cover' }}
@@ -45,4 +45,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;

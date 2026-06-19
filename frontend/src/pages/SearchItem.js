@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const SearchItem = () => {
   const [query, setQuery] = useState('');
@@ -11,7 +11,7 @@ const SearchItem = () => {
     if (!query.trim()) return;
 
     try {
-      const res = await axios.get(`http://localhost:8000/api/items/search?q=${query}`);
+      const res = await api.get(`/api/items/search?q=${query}`);
       console.log('Search results:', res.data);
       setResults(res.data);
       setSearched(true);
@@ -20,7 +20,7 @@ const SearchItem = () => {
     }
 
     try {
-      const sugRes = await axios.get(`http://localhost:8000/api/items/suggest?name=${query}`);
+      const sugRes = await api.get(`/api/items/suggest?name=${query}`);
       console.log('AI suggestion:', sugRes.data);
       setSuggestion(sugRes.data);
     } catch (err) {

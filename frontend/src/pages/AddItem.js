@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const AddItem = () => {
   const [name, setName] = useState('');
@@ -92,7 +92,7 @@ const AddItem = () => {
     if (imageFile) formData.append('image', imageFile);
 
     try {
-      await axios.post('http://localhost:8000/api/items', formData, {
+      await api.post('/api/items', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setIsError(false);

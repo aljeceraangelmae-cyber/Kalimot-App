@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 class ItemController extends Controller
 {
     private function corsHeaders()
-    {
-        return [
-            'Access-Control-Allow-Origin'  => 'http://localhost:3000',
-            'Access-Control-Allow-Methods' => 'GET, POST, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Accept',
-        ];
-    }
+{
+    return [
+        'Access-Control-Allow-Origin'  => '*', // allow all for now, we'll restrict it after frontend is live
+        'Access-Control-Allow-Methods' => 'GET, POST, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers' => 'Content-Type, Accept',
+    ];
+}
 
     public function index()
     {
