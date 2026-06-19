@@ -7,8 +7,16 @@ class ItemController extends Controller
 {
     private function corsHeaders()
 {
+    $allowedOrigins = [
+        'http://localhost:3000',
+        'https://kalimot-app.vercel.app',
+    ];
+
+    $origin = request()->header('Origin');
+    $allowOrigin = in_array($origin, $allowedOrigins) ? $origin : $allowedOrigins[1];
+
     return [
-        'Access-Control-Allow-Origin'  => '*', // allow all for now, we'll restrict it after frontend is live
+        'Access-Control-Allow-Origin'  => $allowOrigin,
         'Access-Control-Allow-Methods' => 'GET, POST, DELETE, OPTIONS',
         'Access-Control-Allow-Headers' => 'Content-Type, Accept',
     ];
