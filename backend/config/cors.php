@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+    'http://localhost:3000',
+    'https://kalimot-app.vercel.app',
+],
 
     'allowed_origins_patterns' => [],
 
@@ -30,7 +33,5 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-    
-    'allowed_origins' => ['http://localhost:3000'],
 
 ];
